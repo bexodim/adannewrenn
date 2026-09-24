@@ -110,7 +110,7 @@ html, body {
      pushes the first lines above the top edge where they can't be reached */
   #poem-wrap { display: block; }
 
-  #footer { margin-top: 10vh; gap: 2.5em; }
+  #footer { margin-top: 6vh; gap: 2.5em; }
   #footer .left,
   #footer .right { flex: 1 1 100%; }
 
