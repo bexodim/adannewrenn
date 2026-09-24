@@ -91,3 +91,32 @@ html, body {
 /* handles visibility of poem, skip button, and footer */
 .show { opacity: 1; pointer-events: auto; }
 .noshow { opacity: 0; pointer-events: none; }
+
+/* ---------- small screens ---------- */
+/* the desktop layout pins itself to the viewport, which works when the poem
+   and footer fit. on a phone they don't, so here the page is allowed to be
+   taller than the screen and scroll instead of clipping. */
+@media (max-width: 640px) {
+  html, body { height: auto; min-height: 100%; }
+
+  #stage {
+    position: static;
+    min-height: 100vh;
+    box-sizing: border-box;
+    padding: 6vh 7vw 6vh 7vw;
+  }
+
+  /* no vertical centering: when content is taller than its box, centering
+     pushes the first lines above the top edge where they can't be reached */
+  #poem-wrap { display: block; }
+
+  #footer { margin-top: 10vh; gap: 2.5em; }
+  #footer .left,
+  #footer .right { flex: 1 1 100%; }
+
+  /* the bio's hard breaks are phrased for a wide screen; on a phone each one
+     wraps into fragments, so let the sentences flow on their own */
+  #footer .bio br { display: none; }
+
+  #skip { top: 14px; right: 16px; }
+}
