@@ -71,16 +71,20 @@ html, body {
 }
 #footer .field button:hover { color: #2B2724; }
 
+/* sits on the title's line: `top` matches #stage's padding-top, `right` its
+   padding-right, and the line-height reproduces the title's line box, so the
+   two strings share a centre line however the clamp resolves */
 #skip {
   position: fixed;
   z-index: 10;
-  top: 22px;
-  right: 26px;
+  top: 6vh;
+  right: 6vw;
   background: none;
   border: none;
-  padding: 6px;
+  padding: 0;
   font-family: inherit;
   font-size: 13px;
+  line-height: calc(clamp(16px, 1.5vw, 20px) * 1.75);
   font-style: italic;
   color: #B3ADA3;
   cursor: pointer;
@@ -104,7 +108,6 @@ html, body {
     min-height: 100vh;
     box-sizing: border-box;
     padding: 2vh 7vw 3vh 7vw;
-    font-size: clamp(13px, 1.25vw, 16px);
   }
 
   /* no vertical centering: when content is taller than its box, centering
@@ -119,5 +122,7 @@ html, body {
      wraps into fragments, so let the sentences flow on their own */
   #footer .bio br { display: none; }
 
-  #skip { top: 14px; right: 16px; }
+  /* just "skip" here, so the title has the top line to itself */
+  #skip { top: 2vh; right: 7vw; }
+  #skip .tail { display: none; }
 }
