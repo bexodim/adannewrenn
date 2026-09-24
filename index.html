@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Does this waning moon worry?</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* inline on purpose: the poem must be invisible from the first paint,
+     before styles.css has a chance to arrive. everything else is in styles.css */
+  .line span { opacity: 0; }
+</style>
+</head>
+<body>
+
+<button id="skip">skip if you must</button>
+
+<div id="stage">
+  <div id="poem-wrap">
+    <div id="poem">
+        <!-- data-hold="3000"   ms the span stays before the next reveal -->
+        <!-- data-fade="400"    ms for its fade in/out -->
+
+        <h1 class="line title" data-hold="3000"><span>Does this waning moon worry?</span></h1>
+        <p class="line"><span>like breath</span> <span>exhaled through lips</span></p>
+        <p class="line"><span>reaching the very edge of existence</span></p>
+        <p class="line"><span>like perennial,</span> <span>dormant, I</span></p>
+        <p class="line"><span>disappear,</span> <span>burrow</span></p>
+        <p class="line"><span data-hold="3500">this is my nature</span></p>
+        <p class="line"><span data-hold="1000">empty space,</span> <span>to fill it again</span></p>
+        <p class="line"><span data-hold="3500">in the next sliver of time</span></p>
+
+        <p class="line"><span data-hold="3000">does this waxing moon rush?</span></p>
+        <p class="line"><span>work</span> <span>at pace</span></p>
+        <p class="line"><span>spinning,</span> <span>orbiting</span></p>
+        <p class="line"><span>hurrying will not bring fullness</span></p>
+        <p class="line"><span>more quickly</span></p>
+        <p class="line"><span>pour until,</span> <span>kiss the brim</span></p>
+        <p class="line"><span>when the time is right</span></p>
+        <p class="line"><span data-hold="3000">I am whole already</span></p>
+
+    </div>
+  </div>
+  <div id="footer" class="noshow">
+      <div class="left">
+          <p class="byline">by adanne <span class="wrenn">wrenn</span></p>
+          <p class="bio">she is one of the many voices of Rebecca Odim.
+              <br />this pen name is an ode to her Igbo and Black American heritage, and matrilineal anchors.
+              <br />drawing on her love of haiku and photography as art forms that capture moments in time,
+              <br />she writes to create a place for herself in everything that is living and has lived.
+              <br />originally from Brooklyn, she currently calls Washington, DC home.
+          </p>
+      </div>
+      <form class="right" id="signup-form">
+          <label for="signup">sign up to hear more</label>
+          <div class="field">
+              <input id="signup" name="email" type="email" placeholder="your email" required />
+              <button type="submit" aria-label="sign up">&rarr;</button>
+          </div>
+      </form>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

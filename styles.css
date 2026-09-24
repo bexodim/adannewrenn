@@ -1,0 +1,93 @@
+html, body {
+  margin: 0;
+  height: 100%;
+  background: #F7F6F2;
+  color: #2B2724;
+  font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+  line-height: 1.75;
+}
+#stage {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 6vh 6vw 4vh 5vw;
+  text-align: left;
+  font-size: clamp(16px, 1.5vw, 20px);
+}
+#poem-wrap {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.line { margin: 0; min-height: 1.75em; }
+/* .line span { opacity: 0 } lives inline in index.html — see the note there */
+.title { font-size: inherit; }   /* cancel the browser's h1 sizing */
+
+/* footer appears with full poem fade in */
+#footer {
+  flex: none;
+  margin-top: 5vh;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2em 4em;
+  font-size: clamp(12px, 1.1vw, 16px);
+}
+
+#footer .left { flex: 1 1 28em; max-width: 44em; }
+#footer .right { flex: 0 1 18em; min-width: 15em; }
+#footer p { margin: 0 0 0.5em; }
+#footer .wrenn {color: #66A6F2; font-style: italic; }
+#footer label { display: block; margin-bottom: 5px; }
+#footer .field {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #D8D2C7;
+}
+#footer .field:focus-within { border-bottom-color: #8C857A; }
+#footer input {
+  flex: 1;
+  min-width: 0;
+  padding: 7px 0;
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: #2B2724;
+}
+#footer input::placeholder { color: #C4BDB1; }
+#footer input:focus { outline: none; }
+#footer .field button {
+  padding: 0 2px 0 10px;
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: #B3ADA3;
+  cursor: pointer;
+}
+#footer .field button:hover { color: #2B2724; }
+
+#skip {
+  position: fixed;
+  z-index: 10;
+  top: 22px;
+  right: 26px;
+  background: none;
+  border: none;
+  padding: 6px;
+  font-family: inherit;
+  font-size: 13px;
+  font-style: italic;
+  color: #B3ADA3;
+  cursor: pointer;
+  transition: color 0.3s, opacity 0.6s;
+}
+#skip:hover { color: #6E675E; }
+
+/* handles visibility of poem, skip button, and footer */
+.show { opacity: 1; pointer-events: auto; }
+.noshow { opacity: 0; pointer-events: none; }
