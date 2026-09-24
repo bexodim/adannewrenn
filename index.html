@@ -55,8 +55,11 @@
           <label for="signup">sign up to hear more</label>
           <div class="field">
               <input id="signup" name="email" type="email" placeholder="your email" required />
+              <input class="nonce" name="nonce" type="text" value="" tabindex="-1"
+                     autocomplete="off" aria-hidden="true" />
               <button type="submit" aria-label="sign up">&rarr;</button>
           </div>
+          <p class="signup-status" role="status" aria-live="polite"></p>
       </form>
   </div>
 </div>

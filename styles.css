@@ -15,8 +15,10 @@ html, body {
   text-align: left;
   font-size: clamp(16px, 1.5vw, 20px);
 }
+/* flex: none, not 1 — the wrap is only as tall as the poem, so the footer
+   follows the last line instead of being pushed to the bottom of the stage */
 #poem-wrap {
-  flex: 1;
+  flex: none;
   display: flex;
   min-height: 0;
 }
@@ -70,6 +72,27 @@ html, body {
   cursor: pointer;
 }
 #footer .field button:hover { color: #2B2724; }
+#footer .field button:disabled { color: #D8D2C7; cursor: default; }
+
+/* honeypot: stays in the DOM where bots will fill it, out of reach of people */
+#footer input.nonce {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+/* min-height reserves the line, so the footer doesn't jump when the message lands */
+#footer .signup-status {
+  margin: 0.5em 0 0;
+  min-height: 1.5em;
+  font-style: italic;
+  color: #B3ADA3;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+#footer .signup-status.on { opacity: 1; }
 
 /* sits on the title's line: `top` matches #stage's padding-top, `right` its
    padding-right, and the line-height reproduces the title's line box, so the
@@ -110,9 +133,7 @@ html, body {
     padding: 2vh 7vw 3vh 7vw;
   }
 
-  /* no vertical centering: when content is taller than its box, centering
-     pushes the first lines above the top edge where they can't be reached */
-  #poem-wrap { display: block; flex: none; }
+  #poem-wrap { display: block; }
 
   #footer { margin-top: 2vh; gap: 1.3em; }
   #footer .left,

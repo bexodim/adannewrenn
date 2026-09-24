@@ -4,7 +4,7 @@ const CONFIG = {
   gap:   250,      // ms — blank pause between lines
   finalWait: 800,  // ms — pause after the last line before the full poem appears
   finalFade: 4000, // ms — how slowly the full poem fades in at the end
-  y: 'center'      // vertical placement: 'top' | 'center' | 'bottom'
+  y: 'top'         // vertical placement: 'top' | 'center' | 'bottom'
 };
 
 const skipBtn = document.getElementById('skip');
@@ -59,8 +59,50 @@ async function showFull() {
   footer.classList.replace('noshow','show');
 }
 
-// not wired to a mailing list yet — this just stops Enter from reloading the page
-document.getElementById('signup-form').addEventListener('submit', e => e.preventDefault());
+// posts to listmonk at newslist.bexodim.com. the page stays put and answers inline,
+// rather than handing the reader off to listmonk's own confirmation page.
+const LIST_UUID = '485d578b-452a-41bf-ad4f-7c4ba087374e';
+const SUBSCRIBE_URL = 'https://newslist.bexodim.com/api/public/subscription';
+
+const signupForm = document.getElementById('signup-form');
+const signupStatus = signupForm.querySelector('.signup-status');
+
+const say = msg => {
+  signupStatus.textContent = msg;
+  signupStatus.classList.add('on');
+};
+
+signupForm.addEventListener('submit', async e => {
+  e.preventDefault();
+
+  // honeypot: a person never sees this field. fail silently — telling a bot it
+  // was caught just invites it to try again differently.
+  if (signupForm.nonce.value) return;
+
+  const btn = signupForm.querySelector('button');
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(SUBSCRIBE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: signupForm.email.value,
+        list_uuids: [LIST_UUID]
+      })
+    });
+    if (res.ok) {
+      signupForm.querySelector('.field').style.display = 'none';
+      say('thank you.');
+    } else {
+      say('that didn\'t go through.');
+      btn.disabled = false;
+    }
+  } catch {
+    say('that didn\'t go through.');
+    btn.disabled = false;
+  }
+});
 
 skipBtn.addEventListener('click', () => {
   skipped = true;
