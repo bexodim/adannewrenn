@@ -103,14 +103,15 @@ html, body {
     position: static;
     min-height: 100vh;
     box-sizing: border-box;
-    padding: 6vh 7vw 6vh 7vw;
+    padding: 2vh 7vw 3vh 7vw;
+    font-size: clamp(13px, 1.25vw, 16px);
   }
 
   /* no vertical centering: when content is taller than its box, centering
      pushes the first lines above the top edge where they can't be reached */
-  #poem-wrap { display: block; }
+  #poem-wrap { display: block; flex: none; }
 
-  #footer { margin-top: 3vh; gap: 2.5em; }
+  #footer { margin-top: 2vh; gap: 1.3em; }
   #footer .left,
   #footer .right { flex: 1 1 100%; }
 
