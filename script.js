@@ -114,6 +114,9 @@ signupForm.addEventListener('submit', async e => {
         newsletters: [{ name: NEWSLETTER }],
         labels: ['adannewrenn.com'],
         honeypot: signupForm.nonce.value,
+        // This page has no code-entry UI, so ask for a plain confirm link.
+        // Ghost's own Portal sets this true for signin/subscribe.
+        includeOTC: false,
         integrityToken
       })
     });
