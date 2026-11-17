@@ -59,10 +59,14 @@ async function showFull() {
   footer.classList.replace('noshow','show');
 }
 
-// posts to listmonk at newslist.bexodim.com. the page stays put and answers inline,
-// rather than handing the reader off to listmonk's own confirmation page.
-const LIST_UUID = '485d578b-452a-41bf-ad4f-7c4ba087374e';
-const SUBSCRIBE_URL = 'https://newslist.bexodim.com/api/public/subscription';
+// Ghost members API. No key lives here: the public endpoints take an email and
+// return nothing about the member list, so there is nothing to leak client-side.
+const GHOST_URL = 'https://by-adanne-wrenn.ghost.io';  // no trailing slash
+
+// Must match the newsletter's name in Ghost EXACTLY — Ghost matches on name,
+// not id, and a mismatch fails with "Cannot subscribe to invalid newsletters".
+// Renaming the newsletter in Ghost means changing this string too.
+const NEWSLETTER = 'poetry by adanne wrenn';
 
 const signupForm = document.getElementById('signup-form');
 const signupStatus = signupForm.querySelector('.signup-status');
@@ -75,32 +79,53 @@ const say = msg => {
 signupForm.addEventListener('submit', async e => {
   e.preventDefault();
 
-  // honeypot: a person never sees this field. fail silently — telling a bot it
-  // was caught just invites it to try again differently.
+  // honeypot: a person never sees this field, fails silently
   if (signupForm.nonce.value) return;
 
   const btn = signupForm.querySelector('button');
   btn.disabled = true;
 
+  // Readers always see the same quiet line; the real reason goes to the console.
+  const fail = async (where, res) => {
+    if (res) {
+      console.error(`[signup] ${where} → ${res.status}`, await res.text().catch(() => ''));
+    } else {
+      console.error(`[signup] ${where}`);
+    }
+    say('that didn\'t go through.');
+    btn.disabled = false;
+  };
+
   try {
-    const res = await fetch(SUBSCRIBE_URL, {
+    // 1. Ghost requires a short-lived integrity token on signup. Plain text
+    //    (ts:nonce:hmac), not JSON — do not call .json() on this.
+    const tokenRes = await fetch(`${GHOST_URL}/members/api/integrity-token/`);
+    if (!tokenRes.ok) return fail('integrity-token', tokenRes);
+    const integrityToken = await tokenRes.text();
+
+    // 2. Sends a confirmation email. No member exists until they click it —
+    //    the newsletter, labels and their IP ride along in the token.
+    const res = await fetch(`${GHOST_URL}/members/api/send-magic-link/`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         email: signupForm.email.value,
-        list_uuids: [LIST_UUID]
+        emailType: 'signup',
+        newsletters: [{ name: NEWSLETTER }],
+        labels: ['adannewrenn.com'],
+        honeypot: signupForm.nonce.value,
+        integrityToken
       })
     });
+
     if (res.ok) {
       signupForm.querySelector('.field').style.display = 'none';
-      say('thank you.');
+      say('check your email to confirm.');
     } else {
-      say('that didn\'t go through.');
-      btn.disabled = false;
+      fail('send-magic-link', res);
     }
-  } catch {
-    say('that didn\'t go through.');
-    btn.disabled = false;
+  } catch (err) {
+    fail(`network/CORS — ${err.message}`);
   }
 });
 

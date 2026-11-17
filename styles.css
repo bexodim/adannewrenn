@@ -15,8 +15,7 @@ html, body {
   text-align: left;
   font-size: clamp(16px, 1.5vw, 20px);
 }
-/* flex: none, not 1 — the wrap is only as tall as the poem, so the footer
-   follows the last line instead of being pushed to the bottom of the stage */
+
 #poem-wrap {
   flex: none;
   display: flex;
@@ -24,7 +23,7 @@ html, body {
 }
 
 .line { margin: 0; min-height: 1.75em; }
-/* .line span { opacity: 0 } lives inline in index.html — see the note there */
+/* .line span { opacity: 0 } lives inline in index.html  */
 .title { font-size: inherit; }   /* cancel the browser's h1 sizing */
 
 /* footer appears with full poem fade in */
@@ -74,7 +73,7 @@ html, body {
 #footer .field button:hover { color: #2B2724; }
 #footer .field button:disabled { color: #D8D2C7; cursor: default; }
 
-/* honeypot: stays in the DOM where bots will fill it, out of reach of people */
+/* honeypot: in the DOM where bots will fill it, out of reach of people */
 #footer input.nonce {
   position: absolute;
   left: -9999px;
@@ -94,9 +93,9 @@ html, body {
 }
 #footer .signup-status.on { opacity: 1; }
 
-/* sits on the title's line: `top` matches #stage's padding-top, `right` its
-   padding-right, and the line-height reproduces the title's line box, so the
-   two strings share a centre line however the clamp resolves */
+/* sits on the title's line: `top` matches #stage's padding-top,
+   and the line-height reproduces the title's line box, so
+   they are vertically aligned however the clamp resolves */
 #skip {
   position: fixed;
   z-index: 10;
