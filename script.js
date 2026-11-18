@@ -59,14 +59,10 @@ async function showFull() {
   footer.classList.replace('noshow','show');
 }
 
-// Ghost members API. No key lives here: the public endpoints take an email and
-// return nothing about the member list, so there is nothing to leak client-side.
-const GHOST_URL = 'https://by-adanne-wrenn.ghost.io';  // no trailing slash
-
-// Must match the newsletter's name in Ghost EXACTLY — Ghost matches on name,
-// not id, and a mismatch fails with "Cannot subscribe to invalid newsletters".
-// Renaming the newsletter in Ghost means changing this string too.
-const NEWSLETTER = 'poetry by adanne wrenn';
+// Signup goes through a Cloudflare Worker that holds the Buttondown API key.
+// No key lives here: the Worker attaches it server-side. Source is in
+// ../adannewrenn-signup-proxy
+const SIGNUP_ENDPOINT = 'https://adannewrenn-signup.adannewrenn.workers.dev';
 
 const signupForm = document.getElementById('signup-form');
 const signupStatus = signupForm.querySelector('.signup-status');
@@ -97,27 +93,15 @@ signupForm.addEventListener('submit', async e => {
   };
 
   try {
-    // 1. Ghost requires a short-lived integrity token on signup. Plain text
-    //    (ts:nonce:hmac), not JSON — do not call .json() on this.
-    const tokenRes = await fetch(`${GHOST_URL}/members/api/integrity-token/`);
-    if (!tokenRes.ok) return fail('integrity-token', tokenRes);
-    const integrityToken = await tokenRes.text();
-
-    // 2. Sends a confirmation email. No member exists until they click it —
-    //    the newsletter, labels and their IP ride along in the token.
-    const res = await fetch(`${GHOST_URL}/members/api/send-magic-link/`, {
+    // The Worker validates the address, adds the key and the caller's IP, then
+    // asks Buttondown to send the confirmation email. Nobody is subscribed
+    // until they click it: Buttondown holds them as `unactivated`.
+    const res = await fetch(SIGNUP_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         email: signupForm.email.value,
-        emailType: 'signup',
-        newsletters: [{ name: NEWSLETTER }],
-        labels: ['adannewrenn.com'],
-        honeypot: signupForm.nonce.value,
-        // This page has no code-entry UI, so ask for a plain confirm link.
-        // Ghost's own Portal sets this true for signin/subscribe.
-        includeOTC: false,
-        integrityToken
+        honeypot: signupForm.nonce.value
       })
     });
 
@@ -125,7 +109,7 @@ signupForm.addEventListener('submit', async e => {
       signupForm.querySelector('.field').style.display = 'none';
       say('check your email to confirm.');
     } else {
-      fail('send-magic-link', res);
+      fail('signup', res);
     }
   } catch (err) {
     fail(`network/CORS — ${err.message}`);
