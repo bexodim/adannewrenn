@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" fill="#F7F6F2"/>
+  <text x="256" y="318" text-anchor="middle"
+        font-family="Georgia, 'Iowan Old Style', 'Palatino Linotype', serif"
+        font-size="260">
+    <tspan fill="#2B2724">a.</tspan><tspan fill="#66A6F2" font-style="italic">w</tspan>
+  </text>
+</svg>
